@@ -3,11 +3,11 @@ import { Control, Errors, LocalForm } from "react-redux-form";
 import { Link } from "react-router-dom";
 import { Breadcrumb, BreadcrumbItem, Button, Col, Label, Row } from "reactstrap";
 
-const required = (val) => val && val.length;
-const maxLength = (len) => (val) => !val || val.length <= len;
-const minLength = (len) => (val) => val && val.length >= len;
-const isNumber = (val) => !isNaN(Number(val));
-const validEmail = (val) => /^[A-Z0-9._%+-]+@[A-Z0-9.-]+\.[A-Z]{2,4}$/i.test(val);
+export const required = (val) => val && val.length;
+export const maxLength = (len) => (val) => !val || val.length <= len;
+export const minLength = (len) => (val) => val && val.length >= len;
+export const isNumber = (val) => !isNaN(Number(val));
+export const validEmail = (val) => /^[A-Z0-9._%+-]+@[A-Z0-9.-]+\.[A-Z]{2,4}$/i.test(val);
 class Contact extends Component {
   handleSubmit(values) {
     console.log("Current State is: " + JSON.stringify(values));
