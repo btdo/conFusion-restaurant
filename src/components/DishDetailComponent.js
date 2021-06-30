@@ -46,12 +46,12 @@ class RenderComments extends Component {
   }
 
   onSubmit(values) {
-    console.log("Current State is: " + JSON.stringify(values));
-    alert("Current State is: " + JSON.stringify(values));
+    this.props.addComment(this.props.dishId, values.rating, values.author, values.comment);
   }
 
   render() {
     let comments = this.props.comments;
+    console.log("Updated comments" + JSON.stringify(comments));
     if (comments != null) {
       return (
         <div className="col-12 m-1">
@@ -102,13 +102,13 @@ class RenderComments extends Component {
                   />
                 </Row>
                 <Row>
-                  <Label htmlFor="name">Your Name</Label>
+                  <Label htmlFor="author">Your Name</Label>
                 </Row>
                 <Row>
                   <Control.text
-                    model=".name"
-                    id="name"
-                    name="name"
+                    model=".author"
+                    id="author"
+                    name="author"
                     className="form-control"
                     validators={{
                       required,
@@ -118,7 +118,7 @@ class RenderComments extends Component {
                   />
                   <Errors
                     className="text-danger"
-                    model=".name"
+                    model=".author"
                     show="touched"
                     messages={{
                       required: "Required",
@@ -128,15 +128,15 @@ class RenderComments extends Component {
                   />
                 </Row>
                 <Row>
-                  <Label htmlFor="feedback">Your FeedBack</Label>
+                  <Label htmlFor="comment">Your FeedBack</Label>
                 </Row>
                 <Row className="form-group">
                   <Control.textarea
-                    model=".message"
+                    model=".comment"
                     className="form-control"
                     rows="5"
-                    id="message"
-                    name="message"
+                    id="comment"
+                    name="comment"
                   ></Control.textarea>
                 </Row>
                 <Row className="form-group">
@@ -176,7 +176,7 @@ const DishDetail = (props) => {
           </div>
           <div className="col-12 col-md-5 m-1">
             <h4>Comments</h4>
-            <RenderComments comments={props.comments} />
+            <RenderComments comments={props.comments} addComment={props.addComment} dishId={props.dish.id} />
           </div>
         </div>
       </div>
