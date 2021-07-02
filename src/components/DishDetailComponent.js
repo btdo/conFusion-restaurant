@@ -16,6 +16,7 @@ import {
   ModalHeader,
   Row,
 } from "reactstrap";
+import { baseUrl } from "../shared/baseUrl";
 import { isNumber, maxLength, minLength, required } from "./ContactComponent";
 import { Loading } from "./LoadingComponent";
 
@@ -23,7 +24,7 @@ const RenderDish = ({ dish }) => {
   console.log(dish);
   return (
     <Card>
-      <CardImg width="100%" src={dish.image} alt={dish.name} />
+      <CardImg width="100%" src={baseUrl + dish.image} alt={dish.name} />
       <CardBody>
         <CardTitle>{dish.name}</CardTitle>
         <CardText>{dish.description}</CardText>
