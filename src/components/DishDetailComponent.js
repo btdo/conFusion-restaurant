@@ -48,7 +48,8 @@ class RenderComments extends Component {
   }
 
   onSubmit(values) {
-    this.props.addComment(this.props.dishId, values.rating, values.author, values.comment);
+    console.log("onSubmit" + JSON.stringify(values));
+    this.props.postComment(this.props.dishId, values.rating, values.author, values.comment);
   }
 
   render() {
@@ -195,7 +196,7 @@ const DishDetail = (props) => {
           </div>
           <div className="col-12 col-md-5 m-1">
             <h4>Comments</h4>
-            <RenderComments comments={props.comments} addComment={props.addComment} dishId={props.dish.id} />
+            <RenderComments comments={props.comments} postComment={props.postComment} dishId={props.dish.id} />
           </div>
         </div>
       </div>
