@@ -42,6 +42,24 @@ export const postComment = (dishId, rating, author, comment) => (dispatch) => {
     .catch((error) => console.log("Post Comment fail"));
 };
 
+export const postFeedback = (feedback) => (dispatch) => {
+  const newFeedback = { ...feedback, date: new Date().toISOString() };
+
+  console.log(JSON.stringify(newFeedback));
+  return fetch(baseUrl + "feedback", {
+    method: "POST",
+    body: JSON.stringify(newFeedback),
+    headers: {
+      "Content-type": "application/json",
+    },
+    credentials: "same-origin",
+  })
+    .then(handleResponse, handleError)
+    .then((response) => response.json())
+    .then((response) => alert(JSON.stringify(response)))
+    .catch((error) => console.log("Post Feedback fail"));
+};
+
 export const fetchDishes = () => (dispatch) => {
   dispatch(dishesLoading());
 
@@ -145,3 +163,41 @@ export const promosFailed = (err) => ({
   type: ActionTypes.PROMOS_FAILED,
   payload: err,
 });
+
+export const addLeaders = (leaders) => ({
+  type: ActionTypes.ADD_LEADERS,
+  payload: leaders,
+});
+
+export const leadersLoading = () => ({
+  type: ActionTypes.LEADERS_LOADING,
+});
+
+export const leadersFailed = (err) => ({
+  type: ActionTypes.LEADERS_FAILED,
+  payload: err,
+});
+
+export const fetchLeaders = () => (dispatch) => {
+  dispatch(leadersLoading);
+
+  return fetch(baseUrl + "leaders")
+    .then(handleResponse, handleError)
+    .then((response) => response.json())
+    .then((leaders) => dispatch(addLeaders(leaders)))
+    .catch((error) => dispatch(leadersFailed(error.message)));
+};
+
+export const handleResponse = (response) => {
+  if (response.ok) {
+    return response;
+  } else {
+    var error = new Error("Error " + response.status + ": " + response.statusText);
+    error.resposne = response;
+    throw error;
+  }
+};
+
+export const handleError = (error) => {
+  throw new Error(error.message);
+};
