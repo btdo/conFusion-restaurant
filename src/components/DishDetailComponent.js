@@ -1,4 +1,4 @@
-import React, { Component } from "react";
+import React, { useState } from "react";
 import { Fade, FadeTransform, Stagger } from "react-animation-components";
 import { Control, Errors, LocalForm } from "react-redux-form";
 import { Link } from "react-router-dom";
@@ -22,7 +22,6 @@ import { isNumber, maxLength, minLength, required } from "./ContactComponent";
 import { Loading } from "./LoadingComponent";
 
 const RenderDish = ({ dish }) => {
-  console.log(dish);
   return (
     <FadeTransform in transformProps={{ exitTransform: "scale(0.5) translateY(-50%)" }}>
       <Card>
@@ -36,12 +35,12 @@ const RenderDish = ({ dish }) => {
   );
 };
 
-const FeedBackForm = ({ isModalOpen, toggleModal }) => {
+const FeedBackForm = ({ isModalOpen, toggleModal, onSubmit }) => {
   return (
     <Modal isOpen={isModalOpen} toggle={toggleModal}>
       <ModalHeader>Submit Comment</ModalHeader>
       <ModalBody className="submit-comment-form">
-        <LocalForm onSubmit={(values) => this.onSubmit(values)}>
+        <LocalForm onSubmit={(values) => onSubmit(values)}>
           <Row>
             <Label htmlFor="rating">Rating</Label>
           </Row>
@@ -115,59 +114,45 @@ const FeedBackForm = ({ isModalOpen, toggleModal }) => {
   );
 };
 
-class RenderComments extends Component {
-  constructor(props) {
-    super(props);
-    this.state = {
-      isModalOpen: false,
-    };
+const RenderComments = ({ comments, postComment, dishId }) => {
+  const [isModalOpen, setModalOpen] = useState(false);
 
-    this.toggleModal = this.toggleModal.bind(this);
+  if (comments != null) {
+    return (
+      <div className="col-12 m-1">
+        <ul className="list-unstyled">
+          <Stagger in>
+            {comments.map((comment) => {
+              return (
+                <Fade in>
+                  <li key={comment.id}>
+                    <p>{comment.comment}</p>
+                    <p>
+                      -- {comment.author},{" "}
+                      {new Intl.DateTimeFormat("en-US", { year: "numeric", month: "short", day: "2-digit" }).format(
+                        new Date(Date.parse(comment.date))
+                      )}
+                    </p>
+                  </li>
+                </Fade>
+              );
+            })}
+          </Stagger>
+        </ul>
+        <Button outline onClick={() => setModalOpen(!isModalOpen)}>
+          <span className="fa fa-sign-in fa-lg"></span> Submit Comment
+        </Button>
+        <FeedBackForm
+          isModalOpen={isModalOpen}
+          toggleModal={() => setModalOpen(!isModalOpen)}
+          onSubmit={(values) => postComment(dishId, values.rating, values.author, values.comment)}
+        />
+      </div>
+    );
+  } else {
+    return <div></div>;
   }
-
-  toggleModal() {
-    this.setState({ isModalOpen: !this.state.isModalOpen });
-  }
-
-  onSubmit(values) {
-    this.props.postComment(this.props.dishId, values.rating, values.author, values.comment);
-  }
-
-  render() {
-    let comments = this.props.comments;
-    if (comments != null) {
-      return (
-        <div className="col-12 m-1">
-          <ul className="list-unstyled">
-            <Stagger in>
-              {comments.map((comment) => {
-                return (
-                  <Fade in>
-                    <li key={comment.id}>
-                      <p>{comment.comment}</p>
-                      <p>
-                        -- {comment.author},{" "}
-                        {new Intl.DateTimeFormat("en-US", { year: "numeric", month: "short", day: "2-digit" }).format(
-                          new Date(Date.parse(comment.date))
-                        )}
-                      </p>
-                    </li>
-                  </Fade>
-                );
-              })}
-            </Stagger>
-          </ul>
-          <Button outline onClick={this.toggleModal}>
-            <span className="fa fa-sign-in fa-lg"></span> Submit Comment
-          </Button>
-          <FeedBackForm isModalOpen={this.state.isModalOpen} toggleModal={this.toggleModal} />
-        </div>
-      );
-    } else {
-      return <div></div>;
-    }
-  }
-}
+};
 
 const DishDetail = (props) => {
   if (props.isLoading) {
