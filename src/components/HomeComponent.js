@@ -5,7 +5,7 @@ import { baseUrl } from "../shared/baseUrl";
 import { Loading } from "./LoadingComponent";
 
 function RenderCard({ item, isLoading, errMess }) {
-  if (isLoading) {
+  if (isLoading || !item) {
     return <Loading />;
   } else if (errMess) {
     return <h4>{errMess}</h4>;
