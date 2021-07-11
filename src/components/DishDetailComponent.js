@@ -36,6 +36,85 @@ const RenderDish = ({ dish }) => {
   );
 };
 
+const FeedBackForm = ({ isModalOpen, toggleModal }) => {
+  return (
+    <Modal isOpen={isModalOpen} toggle={toggleModal}>
+      <ModalHeader>Submit Comment</ModalHeader>
+      <ModalBody className="submit-comment-form">
+        <LocalForm onSubmit={(values) => this.onSubmit(values)}>
+          <Row>
+            <Label htmlFor="rating">Rating</Label>
+          </Row>
+          <Row>
+            <Control.text
+              model=".rating"
+              id="rating"
+              name="rating"
+              className="form-control"
+              validators={{
+                required,
+                isNumber,
+              }}
+            />
+            <Errors
+              className="text-danger"
+              model=".rating"
+              show="touched"
+              messages={{
+                required: "Required",
+                isNumber: "Must be a number",
+              }}
+            />
+          </Row>
+          <Row>
+            <Label htmlFor="author">Your Name</Label>
+          </Row>
+          <Row>
+            <Control.text
+              model=".author"
+              id="author"
+              name="author"
+              className="form-control"
+              validators={{
+                required,
+                minLength: minLength(3),
+                maxLength: maxLength(15),
+              }}
+            />
+            <Errors
+              className="text-danger"
+              model=".author"
+              show="touched"
+              messages={{
+                required: "Required",
+                minLength: "Must be greater than 2 characters",
+                maxLength: "Must be 15 characters or less",
+              }}
+            />
+          </Row>
+          <Row>
+            <Label htmlFor="comment">Your FeedBack</Label>
+          </Row>
+          <Row className="form-group">
+            <Control.textarea
+              model=".comment"
+              className="form-control"
+              rows="5"
+              id="comment"
+              name="comment"
+            ></Control.textarea>
+          </Row>
+          <Row className="form-group">
+            <Button type="submit" color="primary">
+              Submit
+            </Button>
+          </Row>
+        </LocalForm>
+      </ModalBody>
+    </Modal>
+  );
+};
+
 class RenderComments extends Component {
   constructor(props) {
     super(props);
@@ -51,7 +130,6 @@ class RenderComments extends Component {
   }
 
   onSubmit(values) {
-    console.log("onSubmit" + JSON.stringify(values));
     this.props.postComment(this.props.dishId, values.rating, values.author, values.comment);
   }
 
@@ -82,80 +160,7 @@ class RenderComments extends Component {
           <Button outline onClick={this.toggleModal}>
             <span className="fa fa-sign-in fa-lg"></span> Submit Comment
           </Button>
-          <Modal isOpen={this.state.isModalOpen} toggle={this.toggleModal}>
-            <ModalHeader>Submit Comment</ModalHeader>
-            <ModalBody className="submit-comment-form">
-              <LocalForm onSubmit={(values) => this.onSubmit(values)}>
-                <Row>
-                  <Label htmlFor="rating">Rating</Label>
-                </Row>
-                <Row>
-                  <Control.text
-                    model=".rating"
-                    id="rating"
-                    name="rating"
-                    className="form-control"
-                    validators={{
-                      required,
-                      isNumber,
-                    }}
-                  />
-                  <Errors
-                    className="text-danger"
-                    model=".rating"
-                    show="touched"
-                    messages={{
-                      required: "Required",
-                      isNumber: "Must be a number",
-                    }}
-                  />
-                </Row>
-                <Row>
-                  <Label htmlFor="author">Your Name</Label>
-                </Row>
-                <Row>
-                  <Control.text
-                    model=".author"
-                    id="author"
-                    name="author"
-                    className="form-control"
-                    validators={{
-                      required,
-                      minLength: minLength(3),
-                      maxLength: maxLength(15),
-                    }}
-                  />
-                  <Errors
-                    className="text-danger"
-                    model=".author"
-                    show="touched"
-                    messages={{
-                      required: "Required",
-                      minLength: "Must be greater than 2 characters",
-                      maxLength: "Must be 15 characters or less",
-                    }}
-                  />
-                </Row>
-                <Row>
-                  <Label htmlFor="comment">Your FeedBack</Label>
-                </Row>
-                <Row className="form-group">
-                  <Control.textarea
-                    model=".comment"
-                    className="form-control"
-                    rows="5"
-                    id="comment"
-                    name="comment"
-                  ></Control.textarea>
-                </Row>
-                <Row className="form-group">
-                  <Button type="submit" color="primary">
-                    Submit
-                  </Button>
-                </Row>
-              </LocalForm>
-            </ModalBody>
-          </Modal>
+          <FeedBackForm isModalOpen={this.state.isModalOpen} toggleModal={this.toggleModal} />
         </div>
       );
     } else {
