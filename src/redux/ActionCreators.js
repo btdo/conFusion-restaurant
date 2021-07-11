@@ -184,7 +184,9 @@ export const fetchLeaders = () => (dispatch) => {
   return fetch(baseUrl + "leaders")
     .then(handleResponse, handleError)
     .then((response) => response.json())
-    .then((leaders) => dispatch(addLeaders(leaders)))
+    .then((leaders) => {
+      dispatch(addLeaders(leaders));
+    })
     .catch((error) => dispatch(leadersFailed(error.message)));
 };
 

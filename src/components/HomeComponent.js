@@ -10,7 +10,6 @@ function RenderCard({ item, isLoading, errMess }) {
   } else if (errMess) {
     return <h4>{errMess}</h4>;
   } else {
-    console.log(baseUrl + item.image);
     return (
       <FadeTransform in transformProps={{ exitTransform: "scale(0.5) translateY(-50%)" }}>
         <Card>
